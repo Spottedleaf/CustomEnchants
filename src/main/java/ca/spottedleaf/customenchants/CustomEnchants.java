@@ -17,7 +17,7 @@ public final class CustomEnchants extends JavaPlugin {
         ArrayList<Enchant> enchantments = new ArrayList<Enchant>();
         enchantments.add(new TestEnchantment());
         enchantmentManager = new EnchantmentManager(enchantments);
-        this.getServer().getPluginManager().registerEvents(new CustomEnchantmentTable(enchantmentManager), this);
+        this.getServer().getPluginManager().registerEvents(new CustomEnchantmentTable(this, enchantmentManager), this);
     }
 
 
