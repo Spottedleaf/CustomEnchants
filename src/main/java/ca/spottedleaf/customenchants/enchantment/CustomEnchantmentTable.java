@@ -33,7 +33,6 @@ public class CustomEnchantmentTable implements Listener {
        if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) &&
                event.getHand().equals(EquipmentSlot.HAND) &&
                event.getClickedBlock().getType().equals(Material.IRON_BLOCK) && surroundedByObsidian(event.getClickedBlock())) {
-           event.getPlayer().sendMessage("You clicked a table");
             // ENCHANTMENT TABLE GUI
            showEnchantmentTableGUI(event.getPlayer(), new ItemStack(Material.AIR), 0);
         }
@@ -41,11 +40,8 @@ public class CustomEnchantmentTable implements Listener {
 
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent event){
-        event.getWhoClicked().sendMessage(event.getClick().toString());
         if(event.getClickedInventory().getHolder() instanceof EnchantmentInventoryHolder &&
             event.getSlot() == 10){
-            event.getWhoClicked().sendMessage("You clicked on enchanted inventory slot");
-            event.getWhoClicked().sendMessage(event.getCurrentItem() + " Cursor:" + event.getCursor());
             ItemStack cursor = event.getCursor().clone();
             Bukkit.getScheduler().runTask(plugin ,()->updateEnchantmentGUI(event.getClickedInventory(), cursor, (Player) event.getWhoClicked()));
         }
@@ -67,20 +63,25 @@ public class CustomEnchantmentTable implements Listener {
 
     private void updateEnchantmentGUI(Inventory inventory, ItemStack cursor, Player whoClicked){
         ItemStack itemStack = cursor;
-        System.out.println(cursor);
         if(itemStack == null)
             return;
         ArrayList<Enchant> enchants = enchantmentManager.getValidEnchantments(itemStack);
-        //TODO Clear the previous enchantments
+
+        // Clears Enchantment  slots
+
+        int[] enchantmentSlots = {4, 5, 6, 7, 8,
+                                  13, 14, 15, 16,
+                                  22, 23, 24};
+
+        for (int slot : enchantmentSlots)
+            inventory.setItem(slot, new ItemStack(Material.AIR));
+
         for (int i = 0; i < enchants.size(); i++){
-            //BOOK
             ItemStack book = new ItemStack(Material.BOOK);
             ItemMeta bookMeta = book.getItemMeta();
             bookMeta.setDisplayName(enchants.get(i).getEnchantmentName());
             book.setItemMeta(bookMeta);
             inventory.setItem((4 + Math.floorDiv(i, 5) + Math.floorMod(i, 5)), book);
-            System.out.println((4 + Math.floorDiv(i, 5) + Math.floorMod(i, 5)));
-            System.out.println(enchants.get(i).getEnchantmentName());
         }
         whoClicked.updateInventory();
     }
