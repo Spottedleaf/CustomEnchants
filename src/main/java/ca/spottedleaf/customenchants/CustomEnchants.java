@@ -1,15 +1,24 @@
 package ca.spottedleaf.customenchants;
 
 import ca.spottedleaf.customenchants.enchantment.CustomEnchantmentTable;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import ca.spottedleaf.customenchants.enchantment.Enchant;
+import ca.spottedleaf.customenchants.enchantment.EnchantmentManager;
+import ca.spottedleaf.customenchants.enchantment.TestEnchantment;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
 
 public final class CustomEnchants extends JavaPlugin {
 
+    private EnchantmentManager enchantmentManager;
+
     @Override
     public void onEnable(){
-        this.getServer().getPluginManager().registerEvents(new CustomEnchantmentTable(), this);
+        ArrayList<Enchant> enchantments = new ArrayList<Enchant>();
+        enchantments.add(new TestEnchantment());
+        enchantmentManager = new EnchantmentManager(enchantments);
+        this.getServer().getPluginManager().registerEvents(new CustomEnchantmentTable(enchantmentManager), this);
     }
+
+
 }
