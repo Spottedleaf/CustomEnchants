@@ -1,0 +1,4 @@
+main: ca.spottedleaf.customenchants.CustomEnchants
+version: 1.0.0
+name: CustomEnchants
+api-version: 1.13
