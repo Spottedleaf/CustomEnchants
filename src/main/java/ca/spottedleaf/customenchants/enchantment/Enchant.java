@@ -4,6 +4,7 @@ import ca.spottedleaf.customenchants.CustomEnchants;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Projectile;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,4 +50,19 @@ public abstract class Enchant implements Keyed {
     }
 
     public void onProjectileDisenchant(final Projectile projectile) {}
+
+    public void enchant(ItemStack item){}
+
+    public boolean isEnchantable(ItemStack item){
+        return false;
+    }
+
+    public boolean isCompatible(final Enchant other) {
+        return true;
+    }
+
+    public int getRequiredLevel() {return 0;}
+
+    public String getEnchantmentFriendlyName() {return "";}
+
 }
