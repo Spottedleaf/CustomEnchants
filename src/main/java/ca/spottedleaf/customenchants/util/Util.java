@@ -2,10 +2,21 @@ package ca.spottedleaf.customenchants.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public final class Util {
+
+    public static boolean isEmpty(final ItemStack item) {
+        if (item == null) {
+            return true;
+        }
+        final Material type = item.getType();
+
+        return type == Material.AIR || type == Material.CAVE_AIR || type == Material.VOID_AIR;
+    }
 
     private static double square(final double x) {
         return x * x;
