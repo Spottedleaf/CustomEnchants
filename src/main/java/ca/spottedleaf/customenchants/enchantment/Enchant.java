@@ -5,6 +5,7 @@ import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,6 +40,10 @@ public abstract class Enchant implements Keyed {
 
     public final boolean containsEnchantment(final PersistentDataHolder data) {
         return data.getPersistentDataContainer().has(this.key, PersistentDataType.TAG_CONTAINER);
+    }
+
+    public final PersistentDataContainer getData(final PersistentDataHolder dataHolder){
+        return dataHolder.getPersistentDataContainer();
     }
 
     /**
