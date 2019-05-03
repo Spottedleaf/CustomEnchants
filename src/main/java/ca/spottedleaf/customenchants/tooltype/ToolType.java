@@ -1,6 +1,5 @@
 package ca.spottedleaf.customenchants.tooltype;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -11,9 +10,9 @@ import org.bukkit.inventory.ItemStack;
 public interface ToolType {
 
     /**
-     * Returns whether the specified material matches this type.
-     * @param material The material to check against
-     * @return Whether the specified material matches this type.
+     * Returns whether the specified item matches this type.
+     * @param item The item to check against
+     * @return Whether the specified item matches this type.
      */
-    boolean matches(final ItemStack material);
+    boolean matches(final ItemStack item);
 }

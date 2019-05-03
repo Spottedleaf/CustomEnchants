@@ -1,7 +1,6 @@
-package ca.spottedleaf.customenchants.util;
+package ca.spottedleaf.customenchants.enchantment;
 
 import ca.spottedleaf.customenchants.CustomEnchants;
-import ca.spottedleaf.customenchants.enchantment.Enchant;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
@@ -10,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.BiConsumer;
 
-public class EnchantData {
+public final class EnchantData {
 
     private static final CustomEnchants PLUGIN = JavaPlugin.getPlugin(CustomEnchants.class);
 
@@ -109,4 +108,7 @@ public class EnchantData {
         }
     }
 
+    private EnchantData() {
+        throw new RuntimeException();
+    }
 }

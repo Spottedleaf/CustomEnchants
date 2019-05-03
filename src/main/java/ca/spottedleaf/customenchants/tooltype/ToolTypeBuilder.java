@@ -1,6 +1,7 @@
 package ca.spottedleaf.customenchants.tooltype;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -34,7 +35,15 @@ public class ToolTypeBuilder {
     }
 
     public ToolType create() {
-        return materials.clone()::contains;
+        return new ToolType() {
+
+            final EnumSet<Material> MATCH_TO = ToolTypeBuilder.this.materials.clone();
+
+            @Override
+            public boolean matches(final ItemStack item) {
+                return item != null && MATCH_TO.contains(item.getType());
+            }
+        };
     }
 
 }

@@ -1,5 +1,8 @@
 package ca.spottedleaf.customenchants.enchantment;
 
+import ca.spottedleaf.customenchants.tooltype.StandardToolTypes;
+import ca.spottedleaf.customenchants.tooltype.ToolType;
+import ca.spottedleaf.customenchants.tooltype.ToolTypeBuilder;
 import ca.spottedleaf.customenchants.util.ProjectileData;
 import ca.spottedleaf.customenchants.util.ProjectileManager;
 import ca.spottedleaf.customenchants.util.Util;
@@ -15,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.RayTraceResult;
@@ -53,6 +57,13 @@ public class ControlledProjectileEnchant extends Enchant implements Listener {
     public void shutdown() {
         this.controlledProjectiles.stop();
         HandlerList.unregisterAll(this);
+    }
+
+    private static final ToolType TOOLS = new ToolTypeBuilder().add(StandardToolTypes.BOW, StandardToolTypes.ARROW).create();
+
+    @Override
+    public boolean isEnchantable(final ItemStack item) {
+        return TOOLS.matches(item);
     }
 
     public static final class ControlledProjectilesManager extends ProjectileManager<ControlledProjectilesManager.EnchantedProjectile> implements Listener {

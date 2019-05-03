@@ -1,7 +1,6 @@
 package ca.spottedleaf.customenchants.enchantment;
 
 import ca.spottedleaf.customenchants.CustomEnchants;
-import ca.spottedleaf.customenchants.util.EnchantData;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Projectile;
@@ -107,6 +106,20 @@ public abstract class Enchant implements Keyed {
                 this.onItemEnchant((ItemMeta)holder, newSerialized);
             }
         }
+    }
+
+    public final PersistentDataContainer getEnchantment(final PersistentDataHolder holder, final EnchantData.EnchantDataType type) {
+        final PersistentDataContainer enchantData = EnchantData.getEnchantmentData(holder);
+        if (enchantData == null) {
+            return null;
+        }
+
+        PersistentDataContainer enchantments = EnchantData.getEnchantments(enchantData, type);
+        if (enchantments == null) {
+            return null;
+        }
+
+        return enchantments.get(this.key, PersistentDataType.TAG_CONTAINER);
     }
 
     /**

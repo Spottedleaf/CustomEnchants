@@ -3,7 +3,7 @@ package ca.spottedleaf.customenchants.listener;
 import ca.spottedleaf.customenchants.CustomEnchants;
 import ca.spottedleaf.customenchants.enchantment.Enchant;
 import ca.spottedleaf.customenchants.tooltype.StandardToolTypes;
-import ca.spottedleaf.customenchants.util.EnchantData;
+import ca.spottedleaf.customenchants.enchantment.EnchantData;
 import ca.spottedleaf.customenchants.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;

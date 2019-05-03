@@ -1,37 +1,33 @@
 package ca.spottedleaf.customenchants;
 
 import ca.spottedleaf.customenchants.config.CustomEnchantsConfig;
+import ca.spottedleaf.customenchants.enchantment.Enchants;
 import ca.spottedleaf.customenchants.inventory.CustomEnchantmentTable;
 import ca.spottedleaf.customenchants.enchantment.Enchant;
-import ca.spottedleaf.customenchants.enchantment.TestEnchantment;
 import ca.spottedleaf.customenchants.listener.EnchantmentListener;
 import org.bukkit.Bukkit;
-import ca.spottedleaf.customenchants.enchantment.*;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class CustomEnchants extends JavaPlugin {
 
     public final CustomEnchantsConfig config = new CustomEnchantsConfig();
-    private EnchantmentManager enchantmentManager;
+    public final EnchantmentManager enchantmentManager = new EnchantmentManager();
 
     @Override
     public void onLoad() {
         this.config.load(this.getConfig());
+        Enchants.init();
     }
 
     @Override
     public void onEnable(){
-        List<Enchant> enchantments = new ArrayList<Enchant>();
-        enchantments.add(new TestEnchantment());
-        enchantmentManager = new EnchantmentManager(enchantments);
         this.getServer().getPluginManager().registerEvents(new CustomEnchantmentTable(this, enchantmentManager), this);
         Bukkit.getPluginManager().registerEvents(new EnchantmentListener(), this);
-        this.getServer().getPluginManager().registerEvents(new SmeltEnchant(this), this);
+        Enchant.ENCHANTS.forEach(Enchant::init);
     }
 
     @Override
-    public void onDisable() {}
+    public void onDisable() {
+        Enchant.ENCHANTS.forEach(Enchant::shutdown);
+    }
 }

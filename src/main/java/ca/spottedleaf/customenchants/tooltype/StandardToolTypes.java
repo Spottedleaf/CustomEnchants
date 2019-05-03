@@ -48,14 +48,14 @@ public enum StandardToolTypes implements ToolType {
     SWORD(Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.DIAMOND_SWORD, Material.GOLDEN_SWORD),
 
     /**
-     * Consists of {@link #AXE}, {@link #PICKAXE}, {@link #SPADE}, {@link #SWORD}.
+     * Consists of {@link #AXE}, {@link #PICKAXE}, {@link #SPADE}.
      */
-    GENERIC_TOOL(StandardToolTypes.AXE, StandardToolTypes.PICKAXE, StandardToolTypes.SPADE, StandardToolTypes.SWORD),
+    GENERIC_TOOL(StandardToolTypes.AXE, StandardToolTypes.PICKAXE, StandardToolTypes.SPADE),
 
     /**
-     * Consists of {@link #ARROW}, {@link #BOW}, {@link #HOE}, {@link #GENERIC_ARMOUR}, {@link #GENERIC_TOOL}.
+     * Consists of {@link #ARROW}, {@link #BOW}, {@link #HOE}, {@link #SWORD}, {@link #GENERIC_ARMOUR}, {@link #GENERIC_TOOL}.
      */
-    ALL_TOOLS(StandardToolTypes.ARROW, StandardToolTypes.BOW, StandardToolTypes.HOE, StandardToolTypes.GENERIC_ARMOUR, StandardToolTypes.GENERIC_TOOL);
+    ALL_TOOLS(StandardToolTypes.ARROW, StandardToolTypes.BOW, StandardToolTypes.HOE, StandardToolTypes.SWORD, StandardToolTypes.GENERIC_ARMOUR, StandardToolTypes.GENERIC_TOOL);
 
     final EnumSet<Material> matchTo;
 
