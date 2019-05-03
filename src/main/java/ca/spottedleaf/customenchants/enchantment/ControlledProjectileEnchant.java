@@ -12,45 +12,59 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-public class ControlledProjectileEnchant extends Enchant {
+public class ControlledProjectileEnchant extends Enchant implements Listener {
 
     public final ControlledProjectilesManager controlledProjectiles;
 
     public ControlledProjectileEnchant() {
-        super("controlled_projectile");
+        super("controlled_projectile", "Controlled Projectile");
         this.controlledProjectiles = new ControlledProjectilesManager();
+    }
+
+    @Override
+    public void onProjectileEnchant(final Projectile projectile, final PersistentDataContainer enchant) {
+        final ProjectileSource source = projectile.getShooter();
+        if (source instanceof LivingEntity) {
+            this.controlledProjectiles.addProjectile(projectile, (LivingEntity)source,
+                    new ControlledProjectilesManager.EnchantedProjectile(projectile, Math.min(projectile.getVelocity().length(), 0.9)));
+        }
+    }
+
+    @Override
+    public void onProjectileDisenchant(final Projectile projectile, final PersistentDataContainer enchant) {
+        this.controlledProjectiles.removeProjectile(projectile);
     }
 
     @Override
     public void init() {
         this.controlledProjectiles.start();
+        Bukkit.getPluginManager().registerEvents(this, PLUGIN);
+    }
+
+    @Override
+    public void shutdown() {
+        this.controlledProjectiles.stop();
+        HandlerList.unregisterAll(this);
     }
 
     public static final class ControlledProjectilesManager extends ProjectileManager<ControlledProjectilesManager.EnchantedProjectile> implements Listener {
-
-        @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-        public void projectileLaunch(final ProjectileLaunchEvent event) {
-            final ProjectileSource source = event.getEntity().getShooter();
-            if (!(source instanceof LivingEntity)) {
-                return;
-            }
-            this.addProjectile(event.getEntity(), (LivingEntity)source,
-                    new EnchantedProjectile(event.getEntity(), Math.min(event.getEntity().getVelocity().length(), 0.9), 100000.0));
-        }
 
         private static void spawnParticlesForTarget(final World world, final Vector location, final BlockFace face, final int particles) {
             final BlockData particle = Material.REDSTONE_WIRE.createBlockData();
             ((RedstoneWire)particle).setPower(((RedstoneWire)particle).getMaximumPower());
 
-            final double maxOffset = 0.2;
+            final double maxOffset = 0.1;
             if (face == null) {
-                world.spawnParticle(Particle.FALLING_DUST, location.getX(), location.getY(), location.getZ(), particles, maxOffset, maxOffset, maxOffset,1.0, particle, true);
+                world.spawnParticle(Particle.FALLING_DUST, location.getX(), location.getY(), location.getZ(), particles, maxOffset, maxOffset, maxOffset,1.0,
+                        particle, true);
                 return;
             }
 
@@ -60,7 +74,13 @@ public class ControlledProjectileEnchant extends Enchant {
             final double offsety = maxOffset * direction.getY();
             final double offsetz = maxOffset * direction.getZ();
 
-            world.spawnParticle(Particle.FALLING_DUST, location.getX(), location.getY(), location.getZ(), particles, offsetx, offsety, offsetz, 1.0, particle, true);
+            world.spawnParticle(Particle.FALLING_DUST, location.getX() + 0.1 * offsetx, location.getY() + 0.1 * offsety, location.getZ() + 0.1 * offsetz,
+                    particles, offsetx, offsety, offsetz, 1.0, particle, true);
+        }
+
+        @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+        public void onProjectileHit(final ProjectileHitEvent event) {
+            this.removeProjectile(event.getEntity());
         }
 
         @Override
@@ -101,7 +121,7 @@ public class ControlledProjectileEnchant extends Enchant {
             final World world = projectile.getWorld();
             final Location projectileLocation = projectile.getLocation();
 
-            if (this.currentRaycastLocation == null || Util.distanceSquared(this.currentRaycastLocation, projectileLocation) > data.maxRangeSquared) {
+            if (this.currentRaycastLocation == null) {
                 projectile.setGravity(true);
                 return; // out of range
             }
@@ -121,7 +141,7 @@ public class ControlledProjectileEnchant extends Enchant {
 
             final Vector currentDirection = projectile.getVelocity().normalize();
 
-            final Vector newAngle = currentDirection.add(optimalDirection.add(optimalDirection.multiply(0.16)));
+            final Vector newAngle = currentDirection.add(optimalDirection.add(optimalDirection.multiply(0.19)));
 
             projectile.setVelocity(newAngle.multiply(data.speed));
         }
@@ -130,12 +150,10 @@ public class ControlledProjectileEnchant extends Enchant {
 
             public final Projectile projectile;
             public final double speed;
-            public final double maxRangeSquared;
 
-            public EnchantedProjectile(final Projectile projectile, final double speed, final double maxRange) {
+            public EnchantedProjectile(final Projectile projectile, final double speed) {
                 this.projectile = projectile;
                 this.speed = speed;
-                this.maxRangeSquared = maxRange * maxRange;
             }
 
             @Override

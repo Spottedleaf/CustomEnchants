@@ -1,26 +1,26 @@
 package ca.spottedleaf.customenchants.enchantment;
 
-import org.bukkit.Material;
+import ca.spottedleaf.customenchants.tooltype.StandardToolTypes;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class TestEnchantment extends Enchant {
+public class TestEnchantment extends Enchant implements Listener {
+
+    private static final NamespacedKey LEVEL_KEY = new NamespacedKey(PLUGIN, "level");
 
     public TestEnchantment() {
-        super("test");
+        super("test", "Test");
     }
 
     @Override
-    public void enchant(ItemStack item){}
-
-    @Override
-    public boolean isEnchantable(ItemStack item){
-        return item.getType() == Material.DIAMOND_SWORD;
+    public void init() {
+        Bukkit.getPluginManager().registerEvents(this, PLUGIN);
     }
 
     @Override
-    public int getRequiredLevel(){return 0;}
-
-    @Override
-    public String getEnchantmentFriendlyName() {return "Test Enchantment";}
-
+    public boolean isEnchantable(final ItemStack item){
+        return StandardToolTypes.SWORD.matches(item);
+    }
 }

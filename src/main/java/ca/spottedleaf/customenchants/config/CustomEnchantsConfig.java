@@ -2,18 +2,15 @@ package ca.spottedleaf.customenchants.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CustomEnchantsConfig {
 
-    public List<String> disabledEnchantments;
-
-    public CustomEnchantsConfig() {
-
-    }
+    public Set<String> disabledEnchantments;
 
     public void load(final FileConfiguration config) {
-        this.disabledEnchantments = config.getStringList("disabled-enchants");
+        this.disabledEnchantments = new HashSet<>(config.getStringList("disabled-enchants"));
     }
 
 }

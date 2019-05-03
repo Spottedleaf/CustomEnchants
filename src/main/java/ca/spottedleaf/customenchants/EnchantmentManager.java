@@ -1,5 +1,6 @@
-package ca.spottedleaf.customenchants.enchantment;
+package ca.spottedleaf.customenchants;
 
+import ca.spottedleaf.customenchants.enchantment.Enchant;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 

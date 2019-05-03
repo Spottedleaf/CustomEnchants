@@ -18,6 +18,22 @@ public final class Util {
         return type == Material.AIR || type == Material.CAVE_AIR || type == Material.VOID_AIR;
     }
 
+    public static long getBlockKey(final int x, final int y, final int z) {
+        return ((long)x & 0x7FFFFFF) | (((long)z & 0x7FFFFFF) << 27) | ((long)y << 54);
+    }
+
+    public static int getBlockKeyX(final long packed) {
+        return (int)((packed << 37) >> 37);
+    }
+
+    public static int getBlockKeyY(final long packed) {
+        return (int)(packed >>> 54);
+    }
+
+    public static int getBlockKeyZ(final long packed) {
+        return (int)((packed << 10) >> 37);
+    }
+
     private static double square(final double x) {
         return x * x;
     }

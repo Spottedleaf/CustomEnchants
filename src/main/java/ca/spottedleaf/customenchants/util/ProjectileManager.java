@@ -5,8 +5,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
@@ -16,9 +18,25 @@ public abstract class ProjectileManager<T extends ProjectileData> implements Run
     private final Map<UUID, T> ENCHANTED_PROJECTILES = new HashMap<>();
     private final CustomEnchants plugin = CustomEnchants.getPlugin(CustomEnchants.class);
 
+    private BukkitTask repeatTask;
+
     public void start() {
-        Bukkit.getScheduler().runTaskTimer(this.plugin, this, 1L, 1L);
+        this.repeatTask = Bukkit.getScheduler().runTaskTimer(this.plugin, this, 1L, 1L);
         Bukkit.getPluginManager().registerEvents(this, this.plugin);
+    }
+
+    public void stop() {
+        HandlerList.unregisterAll(this);
+        if (this.repeatTask != null) {
+            this.repeatTask.cancel();
+        }
+
+        for (final T projectile : ENCHANTED_PROJECTILES.values()) {
+            this.onProjectileRemoval(projectile.getProjectile(), projectile);
+        }
+
+        PLAYER_PROJECTILES.clear();
+        ENCHANTED_PROJECTILES.clear();
     }
 
     public void addProjectile(final Projectile projectile, final LivingEntity shooter, final T data) {

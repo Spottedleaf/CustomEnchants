@@ -1,5 +1,8 @@
-package ca.spottedleaf.customenchants.enchantment;
+package ca.spottedleaf.customenchants.inventory;
 
+import ca.spottedleaf.customenchants.EnchantmentManager;
+import ca.spottedleaf.customenchants.enchantment.Enchant;
+import ca.spottedleaf.customenchants.inventory.EnchantmentInventoryHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CustomEnchantmentTable implements Listener {
@@ -80,7 +82,7 @@ public class CustomEnchantmentTable implements Listener {
         for (int i = 0; i < enchants.size(); i++){
             ItemStack book = new ItemStack(Material.BOOK);
             ItemMeta bookMeta = book.getItemMeta();
-            bookMeta.setDisplayName(enchants.get(i).getEnchantmentFriendlyName());
+            bookMeta.setDisplayName(enchants.get(i).friendlyName);
             book.setItemMeta(bookMeta);
             inventory.setItem((4 + Math.floorDiv(i, 5) + Math.floorMod(i, 5)), book);
         }
@@ -89,7 +91,7 @@ public class CustomEnchantmentTable implements Listener {
 
     private void showEnchantmentTableGUI(Player player, ItemStack itemStack, int page){
         for (Enchant enchant: enchantmentManager.getValidEnchantments(itemStack)) {
-            player.sendMessage("You can enchant with " + enchant.getEnchantmentFriendlyName());
+            player.sendMessage("You can enchant with " + enchant.friendlyName);
         }
 
         Inventory enchantmentInventory = Bukkit.createInventory(new EnchantmentInventoryHolder(), 27);
@@ -118,7 +120,7 @@ public class CustomEnchantmentTable implements Listener {
             //BOOK
             ItemStack book = new ItemStack(Material.BOOK);
             ItemMeta bookMeta = book.getItemMeta();
-            bookMeta.setDisplayName(enchants.get(i).getEnchantmentFriendlyName());
+            bookMeta.setDisplayName(enchants.get(i).friendlyName);
             book.setItemMeta(bookMeta);
             enchantmentInventory.setItem((4 + Math.floorDiv(i, 5) + Math.floorMod(i, 5)), book);
         }

@@ -1,4 +1,4 @@
-package ca.spottedleaf.customenchants.enchantment;
+package ca.spottedleaf.customenchants.inventory;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
